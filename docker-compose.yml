@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+  
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb+srv://aalsiaadmi:pass123@mynoteapp-cluster.bexnah9.mongodb.net/?retryWrites=true&w=majority
+
+  mongo:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=mynoteapp-cluster
+      - MONGO_INITDB_ROOT_USERNAME=aalsiaadmi
+      - MONGO_INITDB_ROOT_PASSWORD=pass123
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
+  
